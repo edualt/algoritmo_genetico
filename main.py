@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from algoritmo_genetico import GeneticAlgorithm, plot_evolution
+from algoritmo_genetico import GeneticAlgorithm, plot_evolution, plot_fitness_evolution
 from tkinter import messagebox
 
 
@@ -87,6 +87,7 @@ def run(minimize: bool):
   ga.start(minimize)
 
   plot_evolution(ga.maxGenerations, ga.bestCases, ga.worstCases, ga.averageCases)
+  plot_fitness_evolution(ga.averageCases)
 
   messagebox.showinfo(message=f"Genotype: {ga.population[0][0]}\ni: {ga.population[0][1]}, Phenotype: {ga.population[0][2]}, Fitness: {ga.population[0][3]}", title="Best Individual")
 

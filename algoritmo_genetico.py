@@ -8,11 +8,12 @@ import math
 from sympy import lambdify, simplify, sin, cos, symbols 
 from statistics import mean
 from grafica import plot_evolution
+from fitness_evo import plot_fitness_evolution
 
 class GeneticAlgorithm:
     def __init__(self, precision, range_, maxGenerations, maxPopulation, initialPopulationSize, probMutationGene, probMutationIndividual):
         x = symbols('x')
-        expression = (sin(x))
+        expression = ((((x**3)/100) * sin(x)) + ((x**2) * cos(x)))
         self.function = lambdify(x, simplify(expression))
         self.precision = precision
         self.range_ = range_
@@ -28,6 +29,7 @@ class GeneticAlgorithm:
         self.averageCases = []
         self.probMutationIndividual = probMutationIndividual
         self.probMutationGene = probMutationGene
+        self.fitness_over_generations = []
         
     def mutation(self, individual):
         if random.random() <= self.probMutationIndividual: 
@@ -42,6 +44,7 @@ class GeneticAlgorithm:
         phenotype = self.range_[0] + i * self.precision
         phenotype = min(phenotype, self.range_[1])
         fitness = self.function(phenotype)
+        self.fitness_over_generations.append(fitness)
         return [genotype, i, phenotype, fitness]
         
     def pruning(self):
