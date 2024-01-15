@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from algoritmo_genetico import GeneticAlgorithm, plot_evolution, plot_fitness_evolution
+from algoritmo_genetico import GeneticAlgorithm, plot_evolution, plot_population
 from tkinter import messagebox
 
 
@@ -20,37 +20,37 @@ title_label = ttk.Label(root, text="Parameters for the Algorithm", background='r
 
 max_x_label = ttk.Label(root, text="Maximum Value of X:", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 max_x_entry = ttk.Entry(root)
-max_x_entry.insert(0, "2")
+max_x_entry.insert(0, "4")
 max_x_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 min_x_label = ttk.Label(root, text="Minimum Value of X:", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 min_x_entry = ttk.Entry(root)
-min_x_entry.insert(0, "-5")
+min_x_entry.insert(0, "-4")
 min_x_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 resolution_x_label = ttk.Label(root, text="Precision for X:", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 resolution_x_entry = ttk.Entry(root)
-resolution_x_entry.insert(0, "0.5")
+resolution_x_entry.insert(0, "0.05")
 resolution_x_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 max_generation_label = ttk.Label(root, text="Maximum Generations", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 max_generation_entry = ttk.Entry(root)
-max_generation_entry.insert(0, "100")
+max_generation_entry.insert(0, "10")
 max_generation_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 initial_population_label = ttk.Label(root, text="Initial Population", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 initial_population_entry = ttk.Entry(root)
-initial_population_entry.insert(0, "10")
+initial_population_entry.insert(0, "3")
 initial_population_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 max_population_label = ttk.Label(root, text="Maximum Population:", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 max_population_entry = ttk.Entry(root)
-max_population_entry.insert(0, "100")
+max_population_entry.insert(0, "10")
 max_population_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
@@ -62,13 +62,13 @@ individual_mutation_entry.place(x=entry_x_position, y=y_position)
 y_position += y_increment
 gen_mutation_prob_label = ttk.Label(root, text="Pmg", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 gen_mutation_prob_entry = ttk.Entry(root)
-gen_mutation_prob_entry.insert(0, "0.6")
+gen_mutation_prob_entry.insert(0, "0.25")
 gen_mutation_prob_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 crossover_prob_label = ttk.Label(root, text="Crossover Probability (Pc):", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 crossover_prob_entry = ttk.Entry(root)
-crossover_prob_entry.insert(0, "0.5")
+crossover_prob_entry.insert(0, "0.8")
 crossover_prob_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
@@ -86,8 +86,9 @@ def run(minimize: bool):
   ga = GeneticAlgorithm(float(resolution_x_entry.get()), (float(min_x_entry.get()), float(max_x_entry.get())), int(max_generation_entry.get()), int(max_population_entry.get()), int(initial_population_entry.get()), float(individual_mutation_entry.get()), float(gen_mutation_prob_entry.get()))
   ga.start(minimize)
 
-  plot_evolution(ga.maxGenerations, ga.bestCases, ga.worstCases, ga.averageCases)
-  plot_fitness_evolution(ga.averageCases)
+  plot_evolution(ga.max_generations, ga.best_cases, ga.worst_cases, ga.average_cases)
+  print(ga.generations[-1])
+  plot_population(ga.generations[-1])
 
   messagebox.showinfo(message=f"Genotype: {ga.population[0][0]}\ni: {ga.population[0][1]}, Phenotype: {ga.population[0][2]}, Fitness: {ga.population[0][3]}", title="Best Individual")
 
