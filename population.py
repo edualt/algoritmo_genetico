@@ -18,5 +18,5 @@ def plot_population(poblacionActual):
 
   ax.plot(rangox, aptitud)  #Aqui cambiar datos de la grafica
   plt.scatter(rangox, aptitud)
-  plt.title("INDIVIDUOS Y CURVA")
+  plt.title("INDIVIDUOS")
   plt.show()
