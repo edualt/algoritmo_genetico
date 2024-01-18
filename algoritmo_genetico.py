@@ -13,7 +13,8 @@ from population import plot_population
 class GeneticAlgorithm:
     def __init__(self, precision, range_, max_generations, max_population, initial_population_size, prob_mutation_gene, prob_mutation_individual):
         x = symbols('x')
-        expression = ((((x**3)/100) * sin(x)) + ((x**2) * cos(x)))
+        expression = (x * cos(x) * sin(2 * x) + (2 * x) )
+        # expression = ((x ** 2) * cos(5 * x) - (3 * x))
         self.function = lambdify(x, simplify(expression))
         self.precision = precision
         self.range_ = range_
@@ -46,9 +47,19 @@ class GeneticAlgorithm:
         fitness = self.function(phenotype)
         return [genotype, i, phenotype, fitness]
         
-    def pruning(self):
-        self.population.sort(key=lambda individual: individual[3], reverse=True)
-        self.population = self.population[:self.max_population]
+    def pruning(self, minimize):
+        # Eliminar individuos duplicados
+        unique_population = []
+        seen_individuals = set()
+        for individual in self.population:
+            individual_tuple = tuple(individual[0])
+            if individual_tuple not in seen_individuals:
+                unique_population.append(individual)
+                seen_individuals.add(individual_tuple)
+
+        # Ordenar y realizar la poda
+        unique_population.sort(key=lambda x: x[3], reverse=minimize)
+        self.population = unique_population[:self.max_population]
         
     def crossover(self, a, b):
         crossover_point = random.randint(1, self.n_bx - 1)
@@ -82,7 +93,10 @@ class GeneticAlgorithm:
             self.best_cases.append(self.population[0])
             self.worst_cases.append(self.population[-1])
             self.average_cases.append(mean(x[3] for x in self.population))
-            self.pruning()
 
             self.generations.append(self.population.copy())
+
+            if len(self.population) > self.max_population:
+                self.pruning(minimize)
+            
 

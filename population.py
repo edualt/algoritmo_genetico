@@ -1,9 +1,17 @@
-import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_population(poblacionActual):
-  poblacionActual.sort(key=lambda individual: individual[2])  # Sorting by phenotype (x)
-  fig, ax = plt.subplots()
+def plot_population(poblacionActual, minimize):
+  # ordena de mayor a menor
+  poblacionActual.sort(key=lambda x: x[3], reverse=True)
+
+  if minimize:
+    best = poblacionActual[0]
+    worst = poblacionActual[-1]
+  else:
+    best = poblacionActual[-1]
+    worst = poblacionActual[0]
+
+  average = sum([x[3] for x in poblacionActual]) / len(poblacionActual)
 
   rangox = [] #x
   aptitud = [] #y
@@ -12,11 +20,11 @@ def plot_population(poblacionActual):
     rangox.append(x[2])
     aptitud.append(x[3])
 
+  # grafica la siguiente funcion 
 
-  for a, b in zip(rangox, aptitud):
-      plt.text(a, b, f"({round(a,4)}, {round(b,4)})")
-
-  ax.plot(rangox, aptitud)  #Aqui cambiar datos de la grafica
   plt.scatter(rangox, aptitud)
+  plt.scatter(best[2], best[3], color='green')
+  plt.scatter(worst[2], worst[3], color='red')
+  plt.scatter(average, average, color='yellow')
   plt.title("INDIVIDUOS")
   plt.show()

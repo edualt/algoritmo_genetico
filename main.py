@@ -71,11 +71,7 @@ crossover_prob_entry = ttk.Entry(root)
 crossover_prob_entry.insert(0, "0.8")
 crossover_prob_entry.place(x=entry_x_position, y=y_position)
 
-y_position += y_increment
-elitism_size_label = ttk.Label(root, text="Elitism Size:", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
-elitism_size_entry = ttk.Entry(root)
-elitism_size_entry.insert(0, "5")
-elitism_size_entry.place(x=entry_x_position, y=y_position)
+
 
 # Botones
 y_position += y_increment
@@ -87,8 +83,8 @@ def run(minimize: bool):
   ga.start(minimize)
 
   plot_evolution(ga.max_generations, ga.best_cases, ga.worst_cases, ga.average_cases)
-  print(ga.generations[-1])
-  plot_population(ga.generations[-1])
+  # print(ga.generations[-1])
+  plot_population(ga.generations[-1], minimize)
 
   messagebox.showinfo(message=f"Genotype: {ga.population[0][0]}\ni: {ga.population[0][1]}, Phenotype: {ga.population[0][2]}, Fitness: {ga.population[0][3]}", title="Best Individual")
 
