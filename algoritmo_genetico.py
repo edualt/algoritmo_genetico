@@ -146,6 +146,7 @@ class GeneticAlgorithm:
             plt.xlabel("x")
             plt.ylabel("y")
             plt.xlim(self.range_[0], self.range_[1]) 
+            plt.legend(['f(x)', 'individuos', 'mejor', 'peor'])
             plt.savefig(f"images/generation {generation}.png")
             plt.close()
             

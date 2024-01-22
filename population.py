@@ -27,4 +27,5 @@ def plot_population(poblacionActual, minimize, range_, function):
   plt.scatter(worst[2], worst[3], color='red')
   plt.title("INDIVIDUOS")
   plt.xlim(range_[0], range_[1])
+  plt.legend(['f(x)', 'individuos', 'mejor', 'peor'])
   plt.show()
