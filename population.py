@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
-def plot_population(poblacionActual, minimize):
-  # ordena de mayor a menor
+def plot_population(poblacionActual, minimize, range_, function):
   poblacionActual.sort(key=lambda x: x[3], reverse=True)
 
   if minimize:
@@ -11,8 +11,6 @@ def plot_population(poblacionActual, minimize):
     best = poblacionActual[-1]
     worst = poblacionActual[0]
 
-  average = sum([x[3] for x in poblacionActual]) / len(poblacionActual)
-
   rangox = [] #x
   aptitud = [] #y
 
@@ -20,11 +18,13 @@ def plot_population(poblacionActual, minimize):
     rangox.append(x[2])
     aptitud.append(x[3])
 
-  # grafica la siguiente funcion 
+  x = np.linspace(range_[0], range_[1], 1000)
+  y = function(x)
 
+  plt.plot(x, y, color='black', zorder=1)
   plt.scatter(rangox, aptitud)
   plt.scatter(best[2], best[3], color='green')
   plt.scatter(worst[2], worst[3], color='red')
-  plt.scatter(average, average, color='yellow')
   plt.title("INDIVIDUOS")
+  plt.xlim(range_[0], range_[1])
   plt.show()

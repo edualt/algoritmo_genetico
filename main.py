@@ -38,7 +38,7 @@ resolution_x_entry.place(x=entry_x_position, y=y_position)
 y_position += y_increment
 max_generation_label = ttk.Label(root, text="Maximum Generations", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 max_generation_entry = ttk.Entry(root)
-max_generation_entry.insert(0, "10")
+max_generation_entry.insert(0, "20")
 max_generation_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
@@ -50,25 +50,25 @@ initial_population_entry.place(x=entry_x_position, y=y_position)
 y_position += y_increment
 max_population_label = ttk.Label(root, text="Maximum Population:", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 max_population_entry = ttk.Entry(root)
-max_population_entry.insert(0, "10")
+max_population_entry.insert(0, "50")
 max_population_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 individual_mutation_label = ttk.Label(root, text="Pmi", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 individual_mutation_entry = ttk.Entry(root)
-individual_mutation_entry.insert(0, "0.7")
+individual_mutation_entry.insert(0, "0.5")
 individual_mutation_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 gen_mutation_prob_label = ttk.Label(root, text="Pmg", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 gen_mutation_prob_entry = ttk.Entry(root)
-gen_mutation_prob_entry.insert(0, "0.25")
+gen_mutation_prob_entry.insert(0, "0.5")
 gen_mutation_prob_entry.place(x=entry_x_position, y=y_position)
 
 y_position += y_increment
 crossover_prob_label = ttk.Label(root, text="Crossover Probability (Pc):", background='red', font=('Input Mono.', '10')).place(x=label_x_position, y=y_position)
 crossover_prob_entry = ttk.Entry(root)
-crossover_prob_entry.insert(0, "0.8")
+crossover_prob_entry.insert(0, "0.5")
 crossover_prob_entry.place(x=entry_x_position, y=y_position)
 
 
@@ -84,7 +84,7 @@ def run(minimize: bool):
 
   plot_evolution(ga.max_generations, ga.best_cases, ga.worst_cases, ga.average_cases)
   # print(ga.generations[-1])
-  #plot_population(ga.generations[-1], minimize)
+  plot_population(ga.generations[-1], minimize, ga.range_, ga.function)
 
   messagebox.showinfo(message=f"Genotype: {ga.population[0][0]}\ni: {ga.population[0][1]}, Phenotype: {ga.population[0][2]}, Fitness: {ga.population[0][3]}", title="Best Individual")
 

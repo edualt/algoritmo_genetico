@@ -13,10 +13,10 @@ from population import plot_population
 class GeneticAlgorithm:
     def __init__(self, precision, range_, max_generations, max_population, initial_population_size, prob_mutation_gene, prob_mutation_individual):
         x = symbols('x')
-        expression = sin(x)
+        self.expression = cos(x)
         # expression = (x * cos(x) * sin(2 * x) + (2 * x) )
         # expression = ((x ** 2) * cos(5 * x) - (3 * x))
-        self.function = lambdify(x, simplify(expression))
+        self.function = lambdify(x, simplify(self.expression))
         self.precision = precision
         self.range_ = range_
         self.max_population = max_population
@@ -134,16 +134,19 @@ class GeneticAlgorithm:
             self.population[-self.initial_population_size:] = mejores
             mejores = self.population[:self.initial_population_size]
 
+            x2 = np.linspace(self.range_[0], self.range_[1], 1000)
+            y2 = self.function(x2)
+
             fig, ax = plt.subplots()
             ax.scatter(x, y)
-            ax.plot(x, y, color="black")
             plt.scatter(best[2], best[3], color='green')
             plt.scatter(worst[2], worst[3], color='red')
+            plt.plot(x2, y2, color='black', zorder=1)
             plt.title(f"Generación {generation}")
             plt.xlabel("x")
             plt.ylabel("y")
             plt.xlim(self.range_[0], self.range_[1]) 
             plt.savefig(f"images/generation {generation}.png")
-            
+            plt.close()
             
 
