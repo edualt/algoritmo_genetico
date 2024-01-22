@@ -84,7 +84,7 @@ def run(minimize: bool):
 
   plot_evolution(ga.max_generations, ga.best_cases, ga.worst_cases, ga.average_cases)
   # print(ga.generations[-1])
-  plot_population(ga.generations[-1], minimize)
+  #plot_population(ga.generations[-1], minimize)
 
   messagebox.showinfo(message=f"Genotype: {ga.population[0][0]}\ni: {ga.population[0][1]}, Phenotype: {ga.population[0][2]}, Fitness: {ga.population[0][3]}", title="Best Individual")
 

@@ -13,7 +13,8 @@ from population import plot_population
 class GeneticAlgorithm:
     def __init__(self, precision, range_, max_generations, max_population, initial_population_size, prob_mutation_gene, prob_mutation_individual):
         x = symbols('x')
-        expression = (x * cos(x) * sin(2 * x) + (2 * x) )
+        expression = sin(x)
+        # expression = (x * cos(x) * sin(2 * x) + (2 * x) )
         # expression = ((x ** 2) * cos(5 * x) - (3 * x))
         self.function = lambdify(x, simplify(expression))
         self.precision = precision
@@ -78,7 +79,11 @@ class GeneticAlgorithm:
             self.population.append(individual)
             
     def start(self, minimize):
+        mejores = self.population[:self.initial_population_size] 
+        
+        generation = 0
         self.generate_initial_population()
+        
         for _ in range(self.max_generations):
             new_population = []
             for _ in range(len(self.population) // 2):
@@ -98,5 +103,47 @@ class GeneticAlgorithm:
 
             if len(self.population) > self.max_population:
                 self.pruning(minimize)
+                
+            generation += 1
+            x = []
+            y = []
+            for individual in self.population:
+                x.append(individual[2])
+                y.append(individual[3])
+
+            # Create a list of tuples from x and y
+            points = list(zip(x, y))
+
+            # Sort the list of tuples by the x values
+            points.sort(key=lambda point: point[0])
+
+            # Unzip the list of tuples
+            x, y = zip(*points)
+
+            # crea una copia de la poblacion
+            population_copy = self.population.copy()
+            population_copy.sort(key=lambda x: x[3], reverse=True)
+
+            if minimize:
+                best = population_copy[0]
+                worst = population_copy[-1]
+            else:
+                best = population_copy[-1]
+                worst = population_copy[0]
+
+            self.population[-self.initial_population_size:] = mejores
+            mejores = self.population[:self.initial_population_size]
+
+            fig, ax = plt.subplots()
+            ax.scatter(x, y)
+            ax.plot(x, y, color="black")
+            plt.scatter(best[2], best[3], color='green')
+            plt.scatter(worst[2], worst[3], color='red')
+            plt.title(f"Generación {generation}")
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.xlim(self.range_[0], self.range_[1]) 
+            plt.savefig(f"images/generation {generation}.png")
+            
             
 
