@@ -9,12 +9,14 @@ from sympy import lambdify, simplify, sin, cos, symbols
 from statistics import mean
 from grafica import plot_evolution
 from population import plot_population
+from utils import animarPlot, grabarVideo, unirVariosVideos, reproducirVideo
+import time
 
 class GeneticAlgorithm:
-    def __init__(self, precision, range_, max_generations, max_population, initial_population_size, prob_mutation_gene, prob_mutation_individual):
+    def __init__(self, precision, range_, max_generations, max_population, initial_population_size, prob_mutation_gene, prob_mutation_individual, prob_crossover):
         x = symbols('x')
-        self.expression = cos(x)
-        # expression = (x * cos(x) * sin(2 * x) + (2 * x) )
+        # self.expression = sin(x)
+        self.expression = (x * cos(x) * sin(2 * x) + (2 * x) )
         # expression = ((x ** 2) * cos(5 * x) - (3 * x))
         self.function = lambdify(x, simplify(self.expression))
         self.precision = precision
@@ -31,6 +33,7 @@ class GeneticAlgorithm:
         self.average_cases = []
         self.prob_mutation_individual = prob_mutation_individual
         self.prob_mutation_gene = prob_mutation_gene
+        self.prob_crossover = prob_crossover
         self.generations = []
         
     def mutation(self, individual):
@@ -49,7 +52,6 @@ class GeneticAlgorithm:
         return [genotype, i, phenotype, fitness]
         
     def pruning(self, minimize):
-        # Eliminar individuos duplicados
         unique_population = []
         seen_individuals = set()
         for individual in self.population:
@@ -58,7 +60,6 @@ class GeneticAlgorithm:
                 unique_population.append(individual)
                 seen_individuals.add(individual_tuple)
 
-        # Ordenar y realizar la poda
         unique_population.sort(key=lambda x: x[3], reverse=minimize)
         self.population = unique_population[:self.max_population]
         
@@ -77,21 +78,30 @@ class GeneticAlgorithm:
             genotype = [random.getrandbits(1) for _ in range(self.n_bx)]
             individual = self.create_individual(genotype)
             self.population.append(individual)
+    
+    def get_elegible_to_crossover(self, population, prob_crossover):
+        elegible = []
+        for individual in population:
+            if random.random() <= prob_crossover:
+                elegible.append(individual)
+        return elegible
             
     def start(self, minimize):
-        mejores = self.population[:self.initial_population_size] 
-        
-        generation = 0
         self.generate_initial_population()
-        
-        for _ in range(self.max_generations):
+        generation = 0
+        mejores = []
+        while generation < self.max_generations:
             new_population = []
-            for _ in range(len(self.population) // 2):
+            elegible_to_crossover = self.get_elegible_to_crossover(self.population, self.prob_crossover)
+
+            for _ in range(self.max_population - len(elegible_to_crossover)):
                 parent_a = self.select_parent(self.population)
                 parent_b = self.select_parent(self.population)
                 child_a, child_b = self.crossover(parent_a, parent_b)
-                new_population.append(self.mutation(child_a))
-                new_population.append(self.mutation(child_b))
+                child_a = self.mutation(child_a)
+                child_b = self.mutation(child_b)
+                new_population.append(child_a)
+                new_population.append(child_b)
             
             self.population.extend(new_population)
             self.population.sort(key=lambda x: x[3], reverse=minimize)
@@ -137,6 +147,17 @@ class GeneticAlgorithm:
             x2 = np.linspace(self.range_[0], self.range_[1], 1000)
             y2 = self.function(x2)
 
+            listaAnimaciones = []
+            listaVideos = []
+            inicio = time.time()
+            for i in range(len(self.generations)):
+                fig, animar = animarPlot(x,y)
+                listaAnimaciones.append((fig,animar))
+                listaVideos.append(f"video{i}.gif")
+            unirVariosVideos(listaAnimaciones,listaVideos)
+            fin = time.time()
+            print(f"Tiempo de ejecución: {fin - inicio} segundos")
+
             fig, ax = plt.subplots()
             ax.scatter(x, y)
             plt.scatter(best[2], best[3], color='green')
@@ -146,7 +167,7 @@ class GeneticAlgorithm:
             plt.xlabel("x")
             plt.ylabel("y")
             plt.xlim(self.range_[0], self.range_[1]) 
-            plt.legend(['f(x)', 'individuos', 'mejor', 'peor'])
+            plt.legend(['individuos', 'mejor',  'peor', 'f(x)'])
             plt.savefig(f"images/generation {generation}.png")
             plt.close()
             

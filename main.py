@@ -79,7 +79,7 @@ maximize_button = ttk.Button(root, text="Maximize X", command=lambda: run(True))
 minimize_button = ttk.Button(root, text="Minimize X", command=lambda: run(False)).place(x=350, y=y_position)
 
 def run(minimize: bool):
-  ga = GeneticAlgorithm(float(resolution_x_entry.get()), (float(min_x_entry.get()), float(max_x_entry.get())), int(max_generation_entry.get()), int(max_population_entry.get()), int(initial_population_entry.get()), float(individual_mutation_entry.get()), float(gen_mutation_prob_entry.get()))
+  ga = GeneticAlgorithm(float(resolution_x_entry.get()), (float(min_x_entry.get()), float(max_x_entry.get())), int(max_generation_entry.get()), int(max_population_entry.get()), int(initial_population_entry.get()), float(individual_mutation_entry.get()), float(gen_mutation_prob_entry.get()), float(crossover_prob_entry.get()))
   ga.start(minimize)
 
   plot_evolution(ga.max_generations, ga.best_cases, ga.worst_cases, ga.average_cases)
